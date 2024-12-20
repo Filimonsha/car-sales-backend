@@ -1,29 +1,27 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { Brand } from "./Brand";
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { Model } from "./Model";
+import { Brand } from "./Brand";
 
 @Entity()
-export class Car {
+export class Car extends BaseEntity{
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column('varchar')
   carNumber: string;
 
-  @Column()
+  @Column('int')
   rating: number;
 
-  @Column()
-  brandId: number;
 
   @ManyToOne(() => Brand, brand => brand.cars)
   brand: Brand;
 
-  @Column()
-  modelId: number;
+  // @Column()
+  // modelId: number;
 
-  @ManyToOne(() => Model, model => model.cars)
-  model: Model;
+  // @ManyToOne(() => Model, model => model.cars)
+  // model: Model;
 
 //   @Column()
 //   configurationId: number;
