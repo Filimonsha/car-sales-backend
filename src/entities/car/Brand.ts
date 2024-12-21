@@ -1,5 +1,5 @@
 import { Entity, BaseEntity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Car } from './Car';
+import { Car } from './Car.js';
 
 @Entity()
 export class Brand extends BaseEntity{

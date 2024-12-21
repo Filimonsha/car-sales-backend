@@ -1,11 +1,12 @@
 // import { AppDataSource } from "src/db/datasource.js";
 // import { Car } from "src/entities/car/Car";
 import express from 'express'
-import { Car } from '../entities/car/Car';
-import { AppDataSource } from '../db/datasource';
-import { Brand } from '../entities/car/Brand';
+import { Car } from '../entities/car/Car.js';
+import { AppDataSource } from '../db/datasource.js';
+import { Brand } from '../entities/car/Brand.js';
 
 const router = express.Router()
+
 
 router.get('/', async function(req, res) {
   const brandRepository = AppDataSource.getRepository(Brand)
@@ -18,4 +19,7 @@ router.get('/', async function(req, res) {
   res.send('respond with a resource');
 });
 
+router.get('/:id',async function(req,res) {
+
+})
 export default router;

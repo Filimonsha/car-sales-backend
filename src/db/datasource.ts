@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
-import { Car } from '../entities/car/Car';
-import { Brand } from '../entities/car/Brand';
+import { Car } from '../entities/car/Car.js';
+import { Brand } from '../entities/car/Brand.js';
+import { Photo } from 'src/entities/Photo.js';
 
 export const AppDataSource:DataSource = new DataSource({
     type: "postgres",
@@ -12,7 +13,7 @@ export const AppDataSource:DataSource = new DataSource({
     synchronize: true,
     logging: false,
     // entities: ['../entities/**/*{.ts,.js}'],
-    entities: [Car,Brand],
+    entities: [Car,Brand,Photo],
     migrations: [],
     subscribers: [],
 })
