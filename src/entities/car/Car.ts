@@ -15,6 +15,9 @@ export class Car extends BaseEntity{
   @ManyToOne(() => Brand, brand => brand.cars)
   brand: Brand;
 
+  @Column({type:'varchar',nullable:true})
+  base64ImageSrc: string;
+
   // @Column()
   // modelId: number;
 
