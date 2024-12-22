@@ -7,7 +7,7 @@ import type {Request, Response} from 'express'
 import {Car} from "../entities/car/Car";
 import {Brand} from "../entities/car/Brand";
 import {AppDataSource} from "../db/datasource";
-import cars from "../routes/cars";
+import cars from "../routes/cars.route";
 
 class CarSerivce {
     carRepository: Repository<Car>;
@@ -30,9 +30,7 @@ class CarSerivce {
     };
 
     public getCarById = async (id: number) => {
-
         return await this.carRepository.findOneBy({id});
-
     };
 
     public createCar = async (req: Request) => {
@@ -41,30 +39,17 @@ class CarSerivce {
         carData.base64ImageSrc = req.body.base64ImageSrc
         const requestedBrand = carData
         const savedCar = await this.carRepository.save(carData);
-        return await this.carRepository.findOneBy({id:savedCar.id})
+        return await this.carRepository.findOneBy({id: savedCar.id})
     };
 
-    public updateCar = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const {id} = req.params;
-            const carData = req.body;
-            carData.base64ImageSrc = req.body.base64ImageSrc[0]
-
-            const updatedCar = await this.carRepository.update(Number(id), carData);
-            res.status(200).json(updatedCar.raw);
-        } catch (error) {
-            next(error);
-        }
+    public updateCar = async (req: Request) => {
+        const {id} = req.params;
+        const carData = req.body;
+        const updatedCar = await this.carRepository.update(Number(id), carData);
     };
 
-    public deleteCar = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const {id} = req.params;
-            await this.carRepository.delete(Number(id));
-            res.status(204).send('Car deleted successfully');
-        } catch (error) {
-            next(error);
-        }
+    public deleteCar = async (id: number) => {
+        return await this.carRepository.delete(Number(id));
     };
 }
 

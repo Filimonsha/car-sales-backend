@@ -3,8 +3,9 @@ import { AppDataSource } from "./db/datasource.js";
 import express from 'express'
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import carsRouter from "./routes/cars.js"
+import carsRouter from "./routes/cars.route"
 import cors from "cors"
+import configurationsRouter from "./routes/configuration.route";
 // const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 // console.log(path.join(__dirname, '../public'))
 const start = async () => {
@@ -19,7 +20,7 @@ const start = async () => {
   }))
   // app.use('/', indexRouter);
   app.use('/cars', carsRouter);
-  
+  app.use('/configurations',configurationsRouter)
   // catch 404 and forward to error handler
   // app.use(function(req, res, next) {
   //   next(createError(404));

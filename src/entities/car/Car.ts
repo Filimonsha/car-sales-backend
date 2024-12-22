@@ -1,32 +1,24 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { Brand } from "./Brand.js";
+import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, OneToMany} from "typeorm";
+import {Brand} from "./Brand.js";
+import {Model} from "./Model";
+import {Status} from "./Status";
+
 @Entity()
-export class Car extends BaseEntity{
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column('varchar')
-  carNumber: string;
-
-  @Column('int')
-  rating: number;
-
-
-  @ManyToOne(() => Brand, brand => brand.cars)
-  brand: Brand;
-
-  @Column({type:'varchar',nullable:true})
-  base64ImageSrc: string;
-
-  // @Column()
-  // modelId: number;
-
-  // @ManyToOne(() => Model, model => model.cars)
-  // model: Model;
-
-//   @Column()
-//   configurationId: number;
-
-//   @ManyToOne(() => Configuration, config => config.cars)
-//   configuration: Configuration;
+export class Car extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
+    @Column('boolean')
+    showOnMain: boolean;
+    @Column('int')
+    rating: number;
+    @Column('varchar')
+    manufactureCountry: string;
+    @Column({type: 'smallint', nullable: true})
+    yearOfProduction: number;
+    @ManyToOne(() => Brand, brand => brand.cars)
+    brand: Brand;
+    @ManyToOne(() => Model, model => model.car)
+    model: Model;
+    @ManyToOne(() => Status, status => status.cars)
+    status: Status;
 }

@@ -7,8 +7,13 @@ import {DataSource} from "typeorm";
 import {Brand} from "../entities/car/Brand";
 import {Car} from "../entities/car/Car";
 import {Photo} from "../entities/Photo";
+import {Model} from "../entities/car/Model";
+import {Status} from "../entities/car/Status";
+import {Configuration} from "../entities/car/Configuration";
+import {DriveType} from "../entities/car/DriveType";
+import {EngineType} from "../entities/car/EngineType";
 
-export const AppDataSource:DataSource = new DataSource({
+export const AppDataSource: DataSource = new DataSource({
     type: "postgres",
     host: "localhost",
     port: 5432,
@@ -18,7 +23,7 @@ export const AppDataSource:DataSource = new DataSource({
     synchronize: true,
     logging: false,
     // entities: ['../entities/**/*{.ts,.js}'],
-    entities: [Car,Brand,Photo],
+    entities: [Car, Brand, Model, Status, Configuration, DriveType, EngineType],
     migrations: [],
     subscribers: [],
 })
