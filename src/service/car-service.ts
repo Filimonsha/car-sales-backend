@@ -7,7 +7,7 @@ import type {Request, Response} from 'express'
 import {Car} from "../entities/car/Car";
 import {Brand} from "../entities/car/Brand";
 import {AppDataSource} from "../db/datasource";
-import cars from "../routes/cars.route";
+import cars from "../routes/cars.router";
 
 class CarSerivce {
     carRepository: Repository<Car>;
@@ -26,14 +26,14 @@ class CarSerivce {
         const itemCount = await queryBuilder.getCount();
         const {entities} = await queryBuilder.getRawAndEntities();
         // TODO
-        return await this.carRepository.find();
+        return await this.carRepository.find({loadRelationIds:true});
     };
 
     public getCarById = async (id: number) => {
-        return await this.carRepository.findOneBy({id});
+        return await this.carRepository.findOne({where:{id},loadRelationIds:true});
     };
 
-    public createCar = async (req: Request) => {
+    public create = async (req: Request) => {
         const carData = req.body;
         // TODO несколько фоток
         carData.base64ImageSrc = req.body.base64ImageSrc
@@ -42,13 +42,13 @@ class CarSerivce {
         return await this.carRepository.findOneBy({id: savedCar.id})
     };
 
-    public updateCar = async (req: Request) => {
+    public update = async (req: Request) => {
         const {id} = req.params;
         const carData = req.body;
         const updatedCar = await this.carRepository.update(Number(id), carData);
     };
 
-    public deleteCar = async (id: number) => {
+    public delete = async (id: number) => {
         return await this.carRepository.delete(Number(id));
     };
 }

@@ -18,11 +18,12 @@ class ConfigurationsService {
         const itemCount = await queryBuilder.getCount();
         const {entities} = await queryBuilder.getRawAndEntities();
         // TODO
-        return await this.configurationRepository.find();
+        return await this.configurationRepository.find({loadRelationIds:true});
     };
 
     public getById = async (id: number) => {
-        return await this.configurationRepository.findOneBy({id});
+        // return await this.configurationRepository.findOneBy({id});
+        return await this.configurationRepository.findOne({where:{id},loadRelationIds:true});
     };
 
     public create = async (req: Request) => {

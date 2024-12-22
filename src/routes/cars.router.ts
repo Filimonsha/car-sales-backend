@@ -14,6 +14,7 @@ carsRouter.get('/', async function (req, res, next) {
 
         res.status(200).json(cars);
     } catch (error) {
+        res.status(500).json({message: error.message});
         next(error);
     }
 });
@@ -27,30 +28,37 @@ carsRouter.get('/:id', async function (req, res, next) {
         }
         res.status(200).json(car);
     } catch (error) {
+        res.status(500).json({message: error.message});
         next(error);
     }
 })
 carsRouter.post("/",async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const newCar = await carService.createCar(req);
+        const newCar = await carService.create(req);
         res.status(201).json(newCar);
     } catch (error) {
-        res.status(400).json({message:'Bad request'});
+        res.status(400).json({message: error.message});
     }
 })
 
 carsRouter.put('/:id', async function (req, res, next) {
     try {
         const {id} = req.params;
-        const updatedCar = await carService.updateCar(req);
+        const updatedCar = await carService.update(req);
         res.status(200).json(updatedCar);
     } catch (error) {
+        res.status(500).json({message: error.message});
         next(error);
     }
 })
 carsRouter.delete('/:id',async function (req, res, next) {
         const {id} = req.params;
-        const deleted = await carService.deleteCar(Number(id));
-        res.status(204).send('Car deleted successfully');
+        try {
+            const deleted = await carService.delete(Number(id));
+            res.status(204).send('Car deleted successfully');
+        }catch (error) {
+            res.status(500).json({message: error.message});
+            next(error);
+        }
 })
 export default carsRouter;

@@ -2,6 +2,7 @@ import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne,
 import {Brand} from "./Brand.js";
 import {Model} from "./Model";
 import {Status} from "./Status";
+import {Configuration} from "./Configuration";
 
 @Entity()
 export class Car extends BaseEntity {
@@ -21,4 +22,6 @@ export class Car extends BaseEntity {
     model: Model;
     @ManyToOne(() => Status, status => status.cars)
     status: Status;
+    @ManyToOne(() => Configuration)
+    configuration: Configuration;
 }
