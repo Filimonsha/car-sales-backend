@@ -42,4 +42,6 @@ export class Configuration extends BaseEntity {
     model: Model;
     @ManyToOne(() => DriveType, driveType => driveType.configurations)
     driveType: DriveType
+    @OneToMany(() => Car, car => car.configuration)
+    cars: Car[];
 }

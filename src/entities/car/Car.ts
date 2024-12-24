@@ -1,4 +1,4 @@
-import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, OneToMany} from "typeorm";
+import {Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, OneToMany, JoinTable} from "typeorm";
 import {Brand} from "./Brand.js";
 import {Model} from "./Model";
 import {Status} from "./Status";
@@ -10,7 +10,7 @@ export class Car extends BaseEntity {
     id: number;
     @Column('boolean')
     showOnMain: boolean;
-    @Column('int')
+    @Column({type: 'int', nullable: true})
     rating: number;
     @Column('varchar')
     manufactureCountry: string;
@@ -22,6 +22,6 @@ export class Car extends BaseEntity {
     model: Model;
     @ManyToOne(() => Status, status => status.cars)
     status: Status;
-    @ManyToOne(() => Configuration)
+    @ManyToOne(() => Configuration, configuration => configuration.cars)
     configuration: Configuration;
 }

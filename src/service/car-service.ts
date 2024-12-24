@@ -26,11 +26,18 @@ class CarSerivce {
         const itemCount = await queryBuilder.getCount();
         const {entities} = await queryBuilder.getRawAndEntities();
         // TODO
-        return await this.carRepository.find({loadRelationIds:true});
+        return await this.carRepository.find({
+            loadRelationIds: true
+        });
+    };
+    public getAllCarsWithRelations = async () => {
+        return await this.carRepository.find({
+            relations: ['model','brand','configuration.engineType','configuration.driveType']
+        });
     };
 
     public getCarById = async (id: number) => {
-        return await this.carRepository.findOne({where:{id},loadRelationIds:true});
+        return await this.carRepository.findOne({where: {id}, loadRelationIds: true});
     };
 
     public create = async (req: Request) => {

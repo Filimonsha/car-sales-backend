@@ -7,11 +7,16 @@ const carsRouter = express.Router()
 carsRouter.get('/', async function (req, res, next) {
 
     try {
-        const cars = await carService.getAllCars();
-        console.log(cars)
-        res.setHeader('Access-Control-Expose-Headers','Content-Range')
-        res.setHeader('Content-Range',`cars 0-0/2`)
-
+        console.log(req.query)
+        let cars;
+        if (req.query.loadFullInfo){
+            cars = await carService.getAllCarsWithRelations()
+        }else {
+            cars = await carService.getAllCars();
+            console.log(cars)
+            res.setHeader('Access-Control-Expose-Headers','Content-Range')
+            res.setHeader('Content-Range',`cars 0-0/2`)
+        }
         res.status(200).json(cars);
     } catch (error) {
         res.status(500).json({message: error.message});

@@ -37,9 +37,13 @@ class ModelService {
     };
 
     public update = async (req: Request) => {
+        const {updatedBase64ImageSrc,...entityParams} = req.body
         const {id} = req.params;
-        const carData = req.body;
-        return await this.modelRepository.update(Number(id), carData);
+        let carData = entityParams;
+        carData.base64ImageSrc = updatedBase64ImageSrc
+        await this.modelRepository.update(Number(id), carData);
+
+        return await this.modelRepository.findOneBy({id:Number(id)})
     };
 
     public delete = async (id: number) => {
