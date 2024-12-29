@@ -7,11 +7,11 @@ const modelRouter = express.Router()
 
 modelRouter.get('/', async function (req, res, next) {
     try {
-        const configurations = await modelService.getAll();
+        const models = await modelService.getAll();
         res.setHeader('Access-Control-Expose-Headers', 'Content-Range')
         res.setHeader('Content-Range', `cars 0-0/2`)
 
-        res.status(200).json(configurations);
+        res.status(200).json(models);
     } catch (error) {
         res.status(500).json({message: error.message});
         next(error);
@@ -21,11 +21,11 @@ modelRouter.get('/', async function (req, res, next) {
 modelRouter.get('/:id', async function (req, res, next) {
     try {
         const {id} = req.params;
-        const configuration = await modelService.getById(Number(id))
-        if (!configuration) {
+        const model = await modelService.getById(Number(id))
+        if (!model) {
             res.status(404).json({message: 'Configuration not found'});
         }
-        res.status(200).json(configuration);
+        res.status(200).json(model);
     } catch (error) {
         res.status(500).json({message: error.message});
         next(error);

@@ -20,11 +20,16 @@ class ModelService {
         const itemCount = await queryBuilder.getCount();
         const {entities} = await queryBuilder.getRawAndEntities();
         // TODO
-        return await this.modelRepository.find();
+        return await this.modelRepository.find({relations:['configurations','cars']});
     };
 
     public getById = async (id: number) => {
-        return await this.modelRepository.findOneBy({id});
+        const model = await this.modelRepository.findOneBy({id});
+        if (model.galleryImages) {
+            // @ts-ignore
+            model.galleryImages = model.galleryImages.map(image => ({src:image}))
+        }
+        return model;
     };
 
     public create = async (req: Request) => {

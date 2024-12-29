@@ -1,19 +1,20 @@
 import express, {NextFunction, Request, Response} from 'express'
 import carService from "../service/car-service.js";
 
-const carsRouter = express.Router()
+const   carsRouter = express.Router()
 
 
 carsRouter.get('/', async function (req, res, next) {
+//TODO https://www.geeksforgeeks.org/how-to-implement-search-and-filtering-in-a-rest-api-with-node-js-and-express-js/ фильтрация
 
     try {
-        console.log(req.query)
+        console.log("HUUUI",req.query.sort)
         let cars;
         if (req.query.loadFullInfo){
-            cars = await carService.getAllCarsWithRelations()
+            cars = await carService.getAllCarsWithRelations(req)
         }else {
-            cars = await carService.getAllCars();
-            console.log(cars)
+            // @ts-ignore
+            cars = await carService.getAllCars(JSON.parse(req.query.sort),req.query.filter);
             res.setHeader('Access-Control-Expose-Headers','Content-Range')
             res.setHeader('Content-Range',`cars 0-0/2`)
         }
@@ -27,7 +28,12 @@ carsRouter.get('/', async function (req, res, next) {
 carsRouter.get('/:id', async function (req, res, next) {
     try {
         const {id} = req.params;
-        const car = await carService.getCarById(Number(id))
+        let car;
+        if (req.query.loadFullInfo){
+            car = await carService.getByIdWithRelations(Number(id))
+        }else {
+            car = await carService.getById(Number(id))
+        }
         if (!car) {
             res.status(404).json({message: 'Car not found'});
         }

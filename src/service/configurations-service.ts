@@ -18,24 +18,36 @@ class ConfigurationsService {
         const itemCount = await queryBuilder.getCount();
         const {entities} = await queryBuilder.getRawAndEntities();
         // TODO
-        return await this.configurationRepository.find({loadRelationIds:true});
+        return await this.configurationRepository.find({loadRelationIds: true});
     };
 
     public getById = async (id: number) => {
         // return await this.configurationRepository.findOneBy({id});
-        return await this.configurationRepository.findOne({where:{id},loadRelationIds:true});
+        return await this.configurationRepository.findOne({
+            where: {id},
+            loadRelationIds: true,
+            relations: ['engineType', 'driveType', 'exteriorColors', 'interiorColors']
+        });
     };
 
     public create = async (req: Request) => {
-        const savedConfig = await this.configurationRepository.save(req.body);
-        return await this.configurationRepository.findOneBy({id:savedConfig.id})
+        const {cars, exteriorColors, interiorColors, ...putRequestBody} = req.body
+        const requestBody: any = putRequestBody
+        requestBody.exteriorColors = exteriorColors.map(color => ({id:color}))
+        requestBody.interiorColors = interiorColors.map(color => ({id:color}))
+
+        const savedConfig = await this.configurationRepository.save(requestBody);
+        return await this.configurationRepository.findOneBy({id: savedConfig.id})
     };
 
     public update = async (req: Request) => {
-        let configuration = await this.configurationRepository.findOneBy({id:Number(req.params.id)});
-        configuration = req.body
-        const savedConfig = await this.configurationRepository.save(req.body);
-        return await this.configurationRepository.findOneBy({id:savedConfig.id})
+        const {cars, exteriorColors, interiorColors, ...putRequestBody} = req.body
+        const requestBody: any = putRequestBody
+        requestBody.exteriorColors = exteriorColors.map(color => ({id:color}))
+        requestBody.interiorColors = interiorColors.map(color => ({id:color}))
+
+        const savedConfig = await this.configurationRepository.save(requestBody);
+        return await this.configurationRepository.findOneBy({id: savedConfig.id})
     };
 }
 

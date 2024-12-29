@@ -18,26 +18,95 @@ class CarSerivce {
         this.brandRepository = AppDataSource.getRepository(Brand)
     }
 
-    public getAllCars = async (skip?: number, take?: number) => {
-        const queryBuilder = this.carRepository.createQueryBuilder();
-        queryBuilder
-            .skip(skip)
-            .take(take)
-        const itemCount = await queryBuilder.getCount();
-        const {entities} = await queryBuilder.getRawAndEntities();
+    public getAllCars = async (sort?: string[], filter?: string) => {
+        // const queryBuilder = this.carRepository.createQueryBuilder();
+        // queryBuilder
+        //     .skip(skip)
+        //     .take(take)
+        // const itemCount = await queryBuilder.getCount();
+        // const {entities} = await queryBuilder.getRawAndEntities();
         // TODO
-        return await this.carRepository.find({
+        let foundCars = await this.carRepository.find({
             loadRelationIds: true
         });
-    };
-    public getAllCarsWithRelations = async () => {
-        return await this.carRepository.find({
-            relations: ['model','brand','configuration.engineType','configuration.driveType']
-        });
+        if (sort) {
+            foundCars = this.customSort(sort, foundCars);
+        }
+
+        return foundCars;
     };
 
-    public getCarById = async (id: number) => {
+    private customSort(sort: string[], foundCars: Car[]) {
+        if (sort) {
+            foundCars = foundCars.sort((a, b) => {
+                const sortingField = sort[0].split('.');
+                console.log(sortingField, sortingField[0], a[sortingField[0]])
+                let firstObj
+                let secondObj
+                if (sortingField.length > 1) {
+                    firstObj = String(a[sortingField[0]][sortingField[1]])
+                    firstObj = String(b[sortingField[0]][sortingField[1]])
+                } else {
+                    firstObj = String(a[sortingField[0]]);
+                    secondObj = String(b[sortingField[0]]);
+                }
+                return firstObj.localeCompare(secondObj, undefined, {numeric: true})
+            })
+            if (sort.includes("DESC")) {
+                foundCars = foundCars.reverse()
+            }
+        }
+        return foundCars;
+    }
+
+    public getAllCarsWithRelations = async (req) => {
+        const {loadFullInfo, sort, ...filters} = req.query
+        let foundCars = await this.carRepository.find({
+            relations: ['model', 'brand', 'status', 'configuration.engineType', 'configuration.driveType']
+        });
+
+        if (filters) {
+
+            if (filters.engineType) {
+                foundCars = foundCars.filter(car => car.configuration.engineType.engineType === filters.engineType)
+            }
+            if (filters.onStock !== undefined && filters.onStock !== null) {
+                foundCars = foundCars.filter(car => {
+                    console.log(Boolean(filters.onStock), car.onStock)
+                    console.log(car.onStock === Boolean(filters.onStock))
+                    console.log("--------------------")
+                    return car.onStock === JSON.parse(filters.onStock)
+                })
+            }
+            if (filters.status) {
+                foundCars = foundCars.filter(car => car.status.status === filters.status)
+            }
+            // foundCars = foundCars.filter(car => {
+            //     let isValid = true;
+            //
+            //     for (let key in filters) {
+            //         console.log(key, car[key], filters[key]);
+            //         console.log(isValid,car[key] === filters[key])
+            //
+            //         isValid = isValid && (car[key] === filters[key]);
+            //     }
+            //     return isValid;
+            // });
+        }
+        if (sort) {
+            foundCars = this.customSort(sort, foundCars);
+        }
+        return foundCars;
+    };
+
+    public getById = async (id: number) => {
         return await this.carRepository.findOne({where: {id}, loadRelationIds: true});
+    };
+    public getByIdWithRelations = async (id: number) => {
+        return await this.carRepository.findOne({
+            where: {id},
+            relations: ['model.configurations.engineType', 'model.configurations.driveType', 'brand', 'configuration.engineType', 'configuration.driveType', 'configuration.exteriorColors', 'configuration.interiorColors']
+        });
     };
 
     public create = async (req: Request) => {

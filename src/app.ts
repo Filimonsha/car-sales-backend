@@ -11,13 +11,14 @@ import engineTypeRouter from "./routes/engineType.router";
 import driveTypeRouter from "./routes/driveType.router";
 import statusRouter from "./routes/status.router";
 import brandsRoute from "./routes/brands.route";
+import colorRouter from "./routes/colors.router";
 // const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 // console.log(path.join(__dirname, '../public'))
 const start = async () => {
     const app = express();
 
     app.use(logger('dev'));
-    app.use(express.json({limit:'50mb'}));
+    app.use(express.json({limit: '50mb'}));
     app.use(express.urlencoded({extended: false}));
     app.use(cookieParser());
     app.use(cors({
@@ -27,6 +28,7 @@ const start = async () => {
     app.use('/engine-types', engineTypeRouter)
     app.use('/drive-types', driveTypeRouter)
     app.use('/statuses', statusRouter)
+    app.use('/colors', colorRouter)
     app.use('/configuration', configurationsRouter)
     app.use('/models', modelRouter)
     app.use('/brands', brandsRoute)

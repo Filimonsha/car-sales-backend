@@ -12,16 +12,18 @@ export class Car extends BaseEntity {
     showOnMain: boolean;
     @Column({type: 'int', nullable: true})
     rating: number;
+    @Column({type: 'boolean'})
+    onStock: boolean;
     @Column('varchar')
     manufactureCountry: string;
     @Column({type: 'smallint', nullable: true})
     yearOfProduction: number;
-    @ManyToOne(() => Brand, brand => brand.cars)
+    @ManyToOne(() => Brand, brand => brand.cars, {nullable: false})
     brand: Brand;
-    @ManyToOne(() => Model, model => model.car)
+    @ManyToOne(() => Model, model => model.cars, {nullable: false})
     model: Model;
-    @ManyToOne(() => Status, status => status.cars)
+    @ManyToOne(() => Status, status => status.cars, {nullable: false})
     status: Status;
-    @ManyToOne(() => Configuration, configuration => configuration.cars)
+    @ManyToOne(() => Configuration, configuration => configuration.cars, {nullable: false})
     configuration: Configuration;
 }
