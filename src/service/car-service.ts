@@ -8,6 +8,7 @@ import {Car} from "../entities/car/Car";
 import {Brand} from "../entities/car/Brand";
 import {AppDataSource} from "../db/datasource";
 import cars from "../routes/cars.router";
+import {log} from "util";
 
 class CarSerivce {
     carRepository: Repository<Car>;
@@ -30,13 +31,13 @@ class CarSerivce {
             loadRelationIds: true
         });
         if (sort) {
-            foundCars = this.customSort(sort, foundCars);
+            foundCars = this.customSortForAdmin(sort, foundCars);
         }
 
         return foundCars;
     };
 
-    private customSort(sort: string[], foundCars: Car[]) {
+    private customSortForAdmin(sort: string[], foundCars: Car[]) {
         if (sort) {
             foundCars = foundCars.sort((a, b) => {
                 const sortingField = sort[0].split('.');
@@ -46,6 +47,28 @@ class CarSerivce {
                 if (sortingField.length > 1) {
                     firstObj = String(a[sortingField[0]][sortingField[1]])
                     firstObj = String(b[sortingField[0]][sortingField[1]])
+                } else {
+                    firstObj = String(a[sortingField[0]]);
+                    secondObj = String(b[sortingField[0]]);
+                }
+                return firstObj.localeCompare(secondObj, undefined, {numeric: true})
+            })
+            if (sort.includes("DESC")) {
+                foundCars = foundCars.reverse()
+            }
+        }
+        return foundCars;
+    }
+    private customSortForClient(sort: string, foundCars: Car[]) {
+        if (sort) {
+            foundCars = foundCars.sort((a, b) => {
+                const sortingField = JSON.parse(sort)[0].split('.');
+
+                let firstObj
+                let secondObj
+                if (sortingField.length > 1) {
+                    firstObj = String(a[sortingField[0]][sortingField[1]])
+                    secondObj = String(b[sortingField[0]][sortingField[1]])
                 } else {
                     firstObj = String(a[sortingField[0]]);
                     secondObj = String(b[sortingField[0]]);
@@ -94,7 +117,7 @@ class CarSerivce {
             // });
         }
         if (sort) {
-            foundCars = this.customSort(sort, foundCars);
+            foundCars = this.customSortForClient(sort, foundCars);
         }
         return foundCars;
     };
