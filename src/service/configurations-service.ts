@@ -49,6 +49,9 @@ class ConfigurationsService {
         const savedConfig = await this.configurationRepository.save(requestBody);
         return await this.configurationRepository.findOneBy({id: savedConfig.id})
     };
+    public delete = async (id: number) => {
+        return await this.configurationRepository.delete(Number(id));
+    };
 }
 
 const configurationService = new ConfigurationsService()

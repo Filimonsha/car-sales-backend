@@ -1,7 +1,5 @@
 import configurationService from "../service/configurations-service";
 import express, {NextFunction, Request, Response} from "express";
-import carService from "../service/car-service";
-import carsRouter from "./cars.router";
 
 const configurationsRouter = express.Router()
 
@@ -50,10 +48,10 @@ configurationsRouter.put('/:id', async function (req, res, next) {
         next(error);
     }
 })
-carsRouter.delete('/:id',async function (req, res, next) {
+configurationsRouter.delete('/:id',async function (req, res, next) {
     const {id} = req.params;
     try {
-        const deleted = await carService.delete(Number(id));
+        const deleted = await configurationService.delete(Number(id));
         res.status(204).send('Car deleted successfully');
     }catch (error) {
         next(error);
