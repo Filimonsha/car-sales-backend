@@ -50,7 +50,7 @@ modelRouter.put('/:id', async function (req, res, next) {
         next(error);
     }
 })
-carsRouter.delete('/:id',async function (req, res, next) {
+modelRouter.delete('/:id',async function (req, res, next) {
     const {id} = req.params;
     try {
         const deleted = await modelService.delete(Number(id));
