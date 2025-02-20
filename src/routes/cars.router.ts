@@ -8,7 +8,6 @@ carsRouter.get('/', async function (req, res, next) {
 //TODO https://www.geeksforgeeks.org/how-to-implement-search-and-filtering-in-a-rest-api-with-node-js-and-express-js/ фильтрация
 
     try {
-        console.log("HUUUI",req.query.sort)
         let cars;
         if (req.query.loadFullInfo){
             cars = await carService.getAllCarsWithRelations(req)

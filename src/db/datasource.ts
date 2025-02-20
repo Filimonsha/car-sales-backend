@@ -13,6 +13,9 @@ import {Configuration} from "../entities/car/Configuration";
 import {DriveType} from "../entities/car/DriveType";
 import {EngineType} from "../entities/car/EngineType";
 import {Color} from "../entities/car/Color";
+import {Log} from "../entities/Log";
+import {Service} from "../entities/Service";
+import {TypeOfSerivce} from "../entities/TypeOfSerivce";
 
 export const AppDataSource: DataSource = new DataSource({
     type: "postgres",
@@ -24,7 +27,7 @@ export const AppDataSource: DataSource = new DataSource({
     synchronize: true,
     logging: false,
     // entities: ['../entities/**/*{.ts,.js}'],
-    entities: [Car, Brand, Model, Status, Configuration, DriveType, EngineType, Color],
+    entities: [Car, Brand, Model, Status, Configuration, DriveType, EngineType, Color, Log, Service, TypeOfSerivce],
     migrations: [],
     subscribers: [],
 })

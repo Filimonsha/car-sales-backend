@@ -37,6 +37,8 @@ export class Configuration extends BaseEntity {
     breakType: string;
     @Column('varchar')
     typeSuspension: string;
+    @Column({type: 'varchar', nullable: true})
+    comment: string;
     @ManyToOne(() => EngineType, engineType => engineType.configurations, {nullable: false})
     engineType: EngineType
     @ManyToOne(() => Model, model => model.configurations, {nullable: false})
