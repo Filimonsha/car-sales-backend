@@ -7,7 +7,7 @@ const serviceRepository = AppDataSource.getRepository(Service);
 
 serviceRouter.get('/', async function (req, res, next) {
     try {
-        const service = await serviceRepository.find();
+        const service = await serviceRepository.find({relations: ['typeOfService']});
         res.setHeader('Access-Control-Expose-Headers', 'Content-Range')
         res.setHeader('Content-Range', `cars 0-0/2`)
 
